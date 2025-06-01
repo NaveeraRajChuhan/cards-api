@@ -1,1 +1,51 @@
-.
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Pokémon Card</title>
+  <style>
+    .card {
+      width: 250px;
+      border-radius: 15px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      padding: 20px;
+      text-align: center;
+      background: #f4f4f4;
+      font-family: sans-serif;
+      margin: 10px;
+    }
+    .card img {
+      width: 120px;
+    }
+  </style>
+</head>
+<body>
+
+<div id="cards"></div>
+
+<script>
+  async function createPokemonCard(name) {
+    const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`);
+    
+    const data = await res.json();
+    console.log(data);
+
+    const card = document.createElement('div');
+    card.className = 'card';
+
+    card.innerHTML = `
+      <h2>${data.name.toUpperCase()}</h2>
+      <img src="${data.sprites.front_default}" alt="${data.name}" />
+      <p><strong>Type:</strong> ${data.types.map(t => t.type.name).join(', ')}</p>
+      <p><strong>Abilities:</strong> ${data.abilities.map(a => a.ability.name).join(', ')}</p>
+    `;
+
+    document.getElementById('cards').appendChild(card);
+  }
+
+  // Example: create cards for 3 Pokémon
+  ['pikachu', 'bulbasaur', 'charmander'].forEach(createPokemonCard);
+</script>
+
+</body>
+</html>
